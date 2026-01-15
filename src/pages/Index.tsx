@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ServiceCard from "@/components/ServiceCard";
 import TestimonialSlider from "@/components/TestimonialSlider";
+import AnimatedCounter from "@/components/AnimatedCounter";
 import { Award, Shield, MessageSquare } from "lucide-react";
 
 import heroImage from "@/assets/hero-home.jpg";
@@ -91,7 +92,11 @@ const Index = () => {
         <div className="relative container mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-12 items-center">
             <div className="counter-box">
-              <div className="counter-number">28</div>
+              <AnimatedCounter 
+                end={28} 
+                duration={2500} 
+                className="counter-number"
+              />
               <div className="counter-label">Years of Experience</div>
             </div>
             <div className="text-white">
