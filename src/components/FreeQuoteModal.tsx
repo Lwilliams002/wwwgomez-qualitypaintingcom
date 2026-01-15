@@ -18,6 +18,7 @@ const EMAILJS_TEMPLATE_ID = "template_qlgwp1c";
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
   email: z.string().trim().email("Please enter a valid email address").max(255, "Email must be less than 255 characters"),
+  subject: z.string().trim().max(200, "Subject must be less than 200 characters").optional(),
   message: z.string().trim().min(1, "Message is required").max(2000, "Message must be less than 2000 characters"),
 });
 
@@ -28,6 +29,7 @@ const FreeQuoteModal = () => {
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
+    subject: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,13 +83,13 @@ const FreeQuoteModal = () => {
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         from_name: formData.name,
         reply_to: formData.email,
-        subject: "Free Quote Request",
+        subject: formData.subject || "Free Quote Request",
         message: formData.message,
       });
 
       toast.success("Quote request sent! We'll get back to you soon.");
       setIsOpen(false);
-      setFormData({ name: "", email: "", message: "" });
+      setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
       console.error("Error sending email:", error);
       toast.error("Failed to send request. Please try again or call us directly.");
@@ -151,6 +153,21 @@ const FreeQuoteModal = () => {
             {errors.email && (
               <p className="text-destructive text-sm mt-1">{errors.email}</p>
             )}
+          </div>
+
+          <div>
+            <label htmlFor="popup-subject" className="block text-sm font-medium mb-2">
+              Subject
+            </label>
+            <input
+              type="text"
+              id="popup-subject"
+              name="subject"
+              value={formData.subject}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="What's your project about?"
+            />
           </div>
 
           <div>
