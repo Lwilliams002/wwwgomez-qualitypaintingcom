@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { RotateCcw, Shuffle, Palette } from "lucide-react";
 
-type SectionKey = "wall" | "roof" | "door" | "frames" | "trim";
+type SectionKey = "wall" | "roof" | "door" | "frames" | "trim" | "garage" | "accent";
 
 interface ColorOption {
   name: string;
@@ -15,91 +15,114 @@ interface PalettePreset {
 
 const sectionColors: Record<SectionKey, ColorOption[]> = {
   wall: [
-    { name: "White", color: "#ffffff" },
-    { name: "Warm White", color: "#f5efe6" },
-    { name: "Light Beige", color: "#dcd2c4" },
-    { name: "Taupe", color: "#b9aa94" },
-    { name: "Sage Green", color: "#c8d4c5" },
-    { name: "Soft Blue", color: "#ccd5de" },
-    { name: "Light Gray", color: "#d4d4d4" },
-    { name: "Cream", color: "#f5f0dc" },
+    { name: "Desert Sand", color: "#e5ddd0" },
+    { name: "Warm Beige", color: "#d9cfc0" },
+    { name: "Adobe Tan", color: "#c9b99a" },
+    { name: "Cream", color: "#f0e8dc" },
+    { name: "Santa Fe Clay", color: "#d4b896" },
+    { name: "White", color: "#f5f5f0" },
+    { name: "Sage", color: "#c8cfc4" },
+    { name: "Soft Gray", color: "#d8d8d4" },
   ],
   roof: [
-    { name: "Dark Brown", color: "#4a3728" },
     { name: "Charcoal", color: "#3d3d3d" },
-    { name: "Slate Gray", color: "#5a6066" },
-    { name: "Dark Green", color: "#2d4a3e" },
-    { name: "Terracotta", color: "#8b4513" },
-    { name: "Black", color: "#1a1a1a" },
+    { name: "Dark Brown", color: "#4a3f35" },
+    { name: "Slate", color: "#5a5a5a" },
+    { name: "Terracotta", color: "#8b5a3c" },
+    { name: "Desert Tan", color: "#a89078" },
+    { name: "Black", color: "#2a2a2a" },
   ],
   door: [
-    { name: "Navy Blue", color: "#1e3a5f" },
-    { name: "Forest Green", color: "#2d4a3e" },
-    { name: "Burgundy", color: "#722f37" },
+    { name: "Navy Blue", color: "#2c3e5a" },
+    { name: "Teal", color: "#3d6b6b" },
+    { name: "Burgundy", color: "#6b2d3a" },
+    { name: "Forest Green", color: "#3d5a45" },
+    { name: "Turquoise", color: "#4a8b8b" },
     { name: "Black", color: "#1a1a1a" },
-    { name: "Red", color: "#8b2323" },
-    { name: "Teal", color: "#264447" },
+    { name: "Red", color: "#8b3030" },
   ],
   frames: [
     { name: "White", color: "#ffffff" },
-    { name: "Off White", color: "#f5f5f0" },
-    { name: "Light Gray", color: "#d0d0d0" },
-    { name: "Cream", color: "#f5f0e1" },
-    { name: "Black", color: "#1a1a1a" },
+    { name: "Cream", color: "#f5f0e5" },
+    { name: "Almond", color: "#e8e0d5" },
+    { name: "Bronze", color: "#6b5a48" },
+    { name: "Black", color: "#2a2a2a" },
   ],
   trim: [
     { name: "White", color: "#ffffff" },
-    { name: "Cream", color: "#f5efe6" },
-    { name: "Light Gray", color: "#e0e0e0" },
-    { name: "Tan", color: "#c4b7a6" },
+    { name: "Cream", color: "#f0e8dc" },
+    { name: "Match Wall", color: "#e5ddd0" },
+    { name: "Light Tan", color: "#d9cfc0" },
+  ],
+  garage: [
+    { name: "Tan", color: "#c9b99a" },
+    { name: "Almond", color: "#e0d5c5" },
+    { name: "White", color: "#f0ebe5" },
+    { name: "Desert Sand", color: "#d4c4a8" },
+    { name: "Brown", color: "#8b7355" },
+  ],
+  accent: [
+    { name: "Stone Tan", color: "#a89880" },
+    { name: "River Rock", color: "#8b8070" },
+    { name: "Desert Brown", color: "#9a8a70" },
+    { name: "Sandstone", color: "#c4b090" },
+    { name: "Slate", color: "#707068" },
   ],
 };
 
 const palettePresets: PalettePreset[] = [
   {
-    name: "Modern",
+    name: "Classic Santa Fe",
     colors: {
-      wall: "#d4d4d4",
+      wall: "#e5ddd0",
+      roof: "#4a3f35",
+      door: "#3d6b6b",
+      frames: "#ffffff",
+      trim: "#f0e8dc",
+      garage: "#c9b99a",
+      accent: "#a89880",
+    },
+  },
+  {
+    name: "Desert Modern",
+    colors: {
+      wall: "#f5f5f0",
       roof: "#3d3d3d",
-      door: "#1e3a5f",
-      frames: "#ffffff",
+      door: "#2a2a2a",
+      frames: "#2a2a2a",
       trim: "#ffffff",
+      garage: "#e0d5c5",
+      accent: "#707068",
     },
   },
   {
-    name: "Classic",
+    name: "Warm Adobe",
     colors: {
-      wall: "#f5f0dc",
-      roof: "#4a3728",
-      door: "#722f37",
-      frames: "#ffffff",
-      trim: "#ffffff",
-    },
-  },
-  {
-    name: "Craftsman",
-    colors: {
-      wall: "#c8d4c5",
-      roof: "#2d4a3e",
-      door: "#2d4a3e",
-      frames: "#f5f5f0",
-      trim: "#f5efe6",
+      wall: "#d4b896",
+      roof: "#5a5a5a",
+      door: "#6b2d3a",
+      frames: "#f5f0e5",
+      trim: "#f0e8dc",
+      garage: "#d4c4a8",
+      accent: "#9a8a70",
     },
   },
 ];
 
 const defaultColors: Record<SectionKey, string> = {
-  wall: "#e8e4dc",
-  roof: "#4a3728",
-  door: "#1e3a5f",
+  wall: "#e5ddd0",
+  roof: "#4a3f35",
+  door: "#2c3e5a",
   frames: "#ffffff",
-  trim: "#ffffff",
+  trim: "#f0e8dc",
+  garage: "#c9b99a",
+  accent: "#a89880",
 };
 
 const ColorVisualizer = () => {
   const [activeSection, setActiveSection] = useState<SectionKey>("wall");
   const [colors, setColors] = useState<Record<SectionKey, string>>(defaultColors);
-  const [customColor, setCustomColor] = useState("#ffffff");
+  const [customColor, setCustomColor] = useState("#e5ddd0");
 
   const applyColor = useCallback((color: string) => {
     setColors((prev) => ({ ...prev, [activeSection]: color }));
@@ -126,11 +149,13 @@ const ColorVisualizer = () => {
     wall: "Walls",
     roof: "Roof",
     door: "Door",
-    frames: "Window Frames",
+    frames: "Windows",
     trim: "Trim",
+    garage: "Garage Door",
+    accent: "Stone Accent",
   };
 
-  // Helper to darken/lighten colors for shading
+  // Helper to adjust colors for shading
   const adjustColor = (hex: string, percent: number): string => {
     const num = parseInt(hex.replace("#", ""), 16);
     const amt = Math.round(2.55 * percent);
@@ -140,246 +165,312 @@ const ColorVisualizer = () => {
     return `#${(0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1)}`;
   };
 
-  const wallDark = adjustColor(colors.wall, -15);
-  const wallLight = adjustColor(colors.wall, 10);
-  const roofDark = adjustColor(colors.roof, -20);
-  const roofLight = adjustColor(colors.roof, 15);
-  const trimDark = adjustColor(colors.trim, -10);
+  const wallDark = adjustColor(colors.wall, -12);
+  const wallLight = adjustColor(colors.wall, 8);
+  const roofDark = adjustColor(colors.roof, -15);
+  const roofMid = adjustColor(colors.roof, 5);
+  const garageDark = adjustColor(colors.garage, -15);
+  const accentDark = adjustColor(colors.accent, -10);
 
   return (
     <section className="py-16 bg-section-cream">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-8 items-start">
-          {/* Realistic House SVG */}
-          <div className="bg-gradient-to-b from-sky-200 via-sky-100 to-green-100 p-6 rounded-lg shadow-lg overflow-hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" className="w-full h-auto">
+          {/* Southwest Style House SVG */}
+          <div className="rounded-lg shadow-lg overflow-hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" className="w-full h-auto">
               <defs>
-                {/* Sky gradient */}
+                {/* Sky gradient - dusk colors */}
                 <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#87CEEB" />
-                  <stop offset="70%" stopColor="#E0F4FF" />
-                  <stop offset="100%" stopColor="#F0F8FF" />
-                </linearGradient>
-                
-                {/* Ground gradient */}
-                <linearGradient id="groundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#7CB342" />
-                  <stop offset="100%" stopColor="#558B2F" />
+                  <stop offset="0%" stopColor="#4a6fa5" />
+                  <stop offset="40%" stopColor="#8da4c7" />
+                  <stop offset="70%" stopColor="#c9b8a8" />
+                  <stop offset="100%" stopColor="#d4c4b0" />
                 </linearGradient>
 
-                {/* Wall siding texture pattern */}
-                <pattern id="sidingPattern" patternUnits="userSpaceOnUse" width="60" height="8">
-                  <rect width="60" height="8" fill={colors.wall} />
-                  <line x1="0" y1="7.5" x2="60" y2="7.5" stroke={wallDark} strokeWidth="1" opacity="0.3" />
-                </pattern>
+                {/* Stucco texture pattern */}
+                <filter id="stuccoTexture">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise" />
+                  <feDiffuseLighting in="noise" lightingColor="white" surfaceScale="1.5" result="light">
+                    <feDistantLight azimuth="45" elevation="60" />
+                  </feDiffuseLighting>
+                  <feBlend in="SourceGraphic" in2="light" mode="multiply" />
+                </filter>
 
-                {/* Roof shingle pattern */}
-                <pattern id="shinglePattern" patternUnits="userSpaceOnUse" width="30" height="15">
-                  <rect width="30" height="15" fill={colors.roof} />
-                  <path d="M0 0 Q15 5 30 0 L30 3 Q15 8 0 3 Z" fill={roofLight} opacity="0.15" />
-                  <line x1="0" y1="14" x2="30" y2="14" stroke={roofDark} strokeWidth="0.5" opacity="0.4" />
-                  <line x1="15" y1="0" x2="15" y2="15" stroke={roofDark} strokeWidth="0.3" opacity="0.2" />
-                </pattern>
-
-                {/* Wall gradient for 3D effect */}
-                <linearGradient id="wallGradientMain" x1="0%" y1="0%" x2="100%" y2="0%">
+                {/* Wall gradients for 3D effect */}
+                <linearGradient id="wallGradientMain" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" stopColor={wallLight} />
-                  <stop offset="50%" stopColor={colors.wall} />
                   <stop offset="100%" stopColor={wallDark} />
                 </linearGradient>
 
-                {/* Roof gradient */}
-                <linearGradient id="roofGradientMain" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor={roofLight} />
+                <linearGradient id="wallGradientSide" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor={wallDark} />
+                  <stop offset="100%" stopColor={adjustColor(wallDark, -8)} />
+                </linearGradient>
+
+                {/* Roof shingle gradient */}
+                <linearGradient id="roofGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor={roofMid} />
                   <stop offset="100%" stopColor={roofDark} />
                 </linearGradient>
 
-                {/* Window glass gradient */}
-                <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#c5dff5" />
-                  <stop offset="30%" stopColor="#a8c8e8" />
-                  <stop offset="70%" stopColor="#87b5d8" />
-                  <stop offset="100%" stopColor="#6a9fc2" />
+                {/* Window gradient */}
+                <linearGradient id="windowGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#b8c8d8" />
+                  <stop offset="50%" stopColor="#8a9eb5" />
+                  <stop offset="100%" stopColor="#6a8098" />
                 </linearGradient>
 
-                {/* Door panel gradient */}
+                {/* Garage door gradient */}
+                <linearGradient id="garageGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor={colors.garage} />
+                  <stop offset="100%" stopColor={garageDark} />
+                </linearGradient>
+
+                {/* Door gradient */}
                 <linearGradient id="doorGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor={adjustColor(colors.door, 10)} />
-                  <stop offset="50%" stopColor={colors.door} />
-                  <stop offset="100%" stopColor={adjustColor(colors.door, -15)} />
+                  <stop offset="0%" stopColor={adjustColor(colors.door, 5)} />
+                  <stop offset="100%" stopColor={adjustColor(colors.door, -10)} />
                 </linearGradient>
 
-                {/* Shadow filter */}
-                <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feDropShadow dx="3" dy="5" stdDeviation="4" floodOpacity="0.25" />
-                </filter>
-
-                {/* Soft shadow for depth */}
-                <filter id="softShadow">
-                  <feDropShadow dx="2" dy="2" stdDeviation="2" floodOpacity="0.15" />
-                </filter>
+                {/* Ground gravel texture */}
+                <pattern id="gravelPattern" patternUnits="userSpaceOnUse" width="8" height="8">
+                  <rect width="8" height="8" fill="#6b6560" />
+                  <circle cx="2" cy="2" r="1.5" fill="#7a756f" />
+                  <circle cx="6" cy="5" r="1.2" fill="#5d5855" />
+                  <circle cx="4" cy="7" r="1" fill="#787370" />
+                </pattern>
               </defs>
 
-              {/* Background */}
-              <rect width="800" height="600" fill="url(#skyGradient)" />
-              
-              {/* Ground/Lawn */}
-              <ellipse cx="400" cy="600" rx="500" ry="150" fill="url(#groundGradient)" />
-              
-              {/* Driveway */}
-              <path d="M320 520 L360 450 L440 450 L480 520 Z" fill="#9e9e9e" />
-              <path d="M325 520 L362 455 L438 455 L475 520 Z" fill="#bdbdbd" />
+              {/* Sky */}
+              <rect width="900" height="500" fill="url(#skyGradient)" />
 
-              {/* Main House Structure */}
-              <g filter="url(#dropShadow)">
-                {/* Main house body - left section */}
-                <rect x="120" y="280" width="280" height="180" fill="url(#sidingPattern)" />
-                <rect x="120" y="280" width="280" height="180" fill="url(#wallGradientMain)" opacity="0.3" />
+              {/* Clouds */}
+              <ellipse cx="150" cy="80" rx="60" ry="25" fill="#c8b8a8" opacity="0.4" />
+              <ellipse cx="180" cy="70" rx="45" ry="20" fill="#d0c0b0" opacity="0.3" />
+              <ellipse cx="700" cy="60" rx="70" ry="22" fill="#c5b5a5" opacity="0.35" />
+
+              {/* Trees in background */}
+              <g opacity="0.7">
+                {/* Left tree */}
+                <ellipse cx="80" cy="260" rx="55" ry="70" fill="#4a5a48" />
+                <ellipse cx="90" cy="250" rx="45" ry="55" fill="#5a6a55" />
+                <rect x="75" y="310" width="15" height="50" fill="#5a4a3a" />
                 
-                {/* Main house body - right section (garage) */}
-                <rect x="400" y="300" width="200" height="160" fill="url(#sidingPattern)" />
-                <rect x="400" y="300" width="200" height="160" fill={wallDark} opacity="0.1" />
-
-                {/* Foundation */}
-                <rect x="115" y="455" width="290" height="10" fill="#8d8d8d" />
-                <rect x="395" y="455" width="210" height="10" fill="#8d8d8d" />
+                {/* Right trees */}
+                <ellipse cx="820" cy="270" rx="50" ry="65" fill="#4a5848" />
+                <ellipse cx="800" cy="260" rx="40" ry="50" fill="#5a6855" />
+                <rect x="795" y="310" width="12" height="45" fill="#5a4a3a" />
               </g>
 
-              {/* Main Roof */}
-              <g filter="url(#softShadow)">
-                {/* Left roof section */}
-                <polygon points="100,280 260,150 420,280" fill="url(#shinglePattern)" />
-                <polygon points="100,280 260,150 420,280" fill="url(#roofGradientMain)" opacity="0.4" />
+              {/* Ground/gravel driveway */}
+              <rect x="0" y="380" width="900" height="120" fill="url(#gravelPattern)" />
+              <rect x="0" y="380" width="900" height="120" fill="#6b6560" opacity="0.3" />
+
+              {/* Concrete driveway */}
+              <path d="M100 380 L280 380 L300 500 L80 500 Z" fill="#9a9590" />
+              <path d="M100 380 L280 380 L300 500 L80 500 Z" fill="#a5a09a" opacity="0.5" />
+
+              {/* Desert landscaping - rocks */}
+              <ellipse cx="400" cy="410" rx="25" ry="12" fill="#c8c0b5" />
+              <ellipse cx="500" cy="405" rx="18" ry="10" fill="#d5cdc2" />
+              <ellipse cx="580" cy="415" rx="22" ry="11" fill="#bab2a8" />
+
+              {/* Main House Body - Right Section */}
+              <g>
+                {/* Main stucco wall */}
+                <rect x="280" y="230" width="380" height="150" fill={colors.wall} />
+                <rect x="280" y="230" width="380" height="150" fill="url(#wallGradientMain)" opacity="0.3" />
                 
-                {/* Right roof section (lower) */}
-                <polygon points="380,300 500,220 620,300" fill="url(#shinglePattern)" />
-                <polygon points="380,300 500,220 620,300" fill="url(#roofGradientMain)" opacity="0.4" />
+                {/* Stone accent band */}
+                <rect x="280" y="350" width="380" height="30" fill={colors.accent} />
+                <rect x="280" y="350" width="380" height="30" fill={accentDark} opacity="0.2" />
+                {/* Stone texture lines */}
+                <line x1="320" y1="350" x2="320" y2="380" stroke={accentDark} strokeWidth="1" opacity="0.3" />
+                <line x1="380" y1="350" x2="380" y2="380" stroke={accentDark} strokeWidth="1" opacity="0.3" />
+                <line x1="450" y1="350" x2="450" y2="380" stroke={accentDark} strokeWidth="1" opacity="0.3" />
+                <line x1="520" y1="350" x2="520" y2="380" stroke={accentDark} strokeWidth="1" opacity="0.3" />
+                <line x1="590" y1="350" x2="590" y2="380" stroke={accentDark} strokeWidth="1" opacity="0.3" />
+              </g>
 
-                {/* Roof trim/fascia - left */}
-                <polygon points="95,283 260,148 425,283 420,280 260,152 100,280" fill={colors.trim} />
+              {/* Garage Section - Left */}
+              <g>
+                {/* Garage wall */}
+                <rect x="100" y="250" width="180" height="130" fill={colors.wall} />
+                <rect x="100" y="250" width="180" height="130" fill="url(#wallGradientMain)" opacity="0.3" />
                 
-                {/* Roof trim/fascia - right */}
-                <polygon points="375,303 500,218 625,303 620,300 500,222 380,300" fill={colors.trim} />
+                {/* Side wall (angled shadow) */}
+                <polygon points="100,250 100,380 80,400 80,270" fill="url(#wallGradientSide)" />
               </g>
 
-              {/* Chimney */}
-              <rect x="320" y="170" width="35" height="70" fill="#8b7355" />
-              <rect x="315" y="165" width="45" height="10" fill="#6d5a45" />
-
-              {/* Front Porch */}
-              <rect x="200" y="400" width="180" height="60" fill="#c4b7a6" />
-              <rect x="200" y="395" width="180" height="8" fill={colors.trim} />
-              
-              {/* Porch columns */}
-              <rect x="210" y="340" width="12" height="60" fill={colors.trim} />
-              <rect x="210" y="335" width="12" height="8" fill={trimDark} />
-              <rect x="358" y="340" width="12" height="60" fill={colors.trim} />
-              <rect x="358" y="335" width="12" height="8" fill={trimDark} />
-
-              {/* Porch roof */}
-              <polygon points="195,340 290,290 385,340" fill={colors.roof} />
-              <polygon points="190,343 290,288 390,343 385,340 290,292 195,340" fill={colors.trim} />
-
-              {/* Front Door */}
+              {/* Main Hip Roof - Right Section */}
               <g>
-                <rect x="265" y="340" width="50" height="85" fill="url(#doorGradient)" rx="2" />
-                {/* Door panels */}
-                <rect x="272" y="350" width="36" height="30" fill={adjustColor(colors.door, -10)} rx="1" opacity="0.6" />
-                <rect x="272" y="388" width="36" height="30" fill={adjustColor(colors.door, -10)} rx="1" opacity="0.6" />
-                {/* Door handle */}
-                <circle cx="302" cy="385" r="4" fill="#d4af37" />
-                {/* Door frame */}
-                <rect x="260" y="335" width="60" height="5" fill={colors.trim} />
-                <rect x="260" y="340" width="5" height="85" fill={colors.trim} />
-                <rect x="315" y="340" width="5" height="85" fill={colors.trim} />
+                <polygon points="260,230 470,140 680,230" fill={colors.roof} />
+                <polygon points="260,230 470,140 680,230" fill="url(#roofGradient)" opacity="0.5" />
+                {/* Roof fascia/trim */}
+                <polygon points="255,233 470,138 685,233 680,230 470,142 260,230" fill={colors.trim} />
               </g>
 
-              {/* Windows - Main floor left */}
+              {/* Garage Hip Roof */}
               <g>
-                <rect x="145" y="320" width="55" height="70" fill={colors.frames} rx="1" />
-                <rect x="150" y="325" width="45" height="60" fill="url(#glassGradient)" />
-                <line x1="172.5" y1="325" x2="172.5" y2="385" stroke={colors.frames} strokeWidth="3" />
-                <line x1="150" y1="355" x2="195" y2="355" stroke={colors.frames} strokeWidth="3" />
-                {/* Window sill */}
-                <rect x="142" y="388" width="61" height="6" fill={colors.trim} />
+                <polygon points="80,250 190,180 300,250" fill={colors.roof} />
+                <polygon points="80,250 190,180 300,250" fill="url(#roofGradient)" opacity="0.5" />
+                {/* Roof fascia */}
+                <polygon points="75,253 190,178 305,253 300,250 190,182 80,250" fill={colors.trim} />
               </g>
 
-              {/* Windows - Second floor */}
-              <g>
-                <rect x="175" y="200" width="45" height="55" fill={colors.frames} rx="1" />
-                <rect x="180" y="205" width="35" height="45" fill="url(#glassGradient)" />
-                <line x1="197.5" y1="205" x2="197.5" y2="250" stroke={colors.frames} strokeWidth="2" />
-                <line x1="180" y1="227.5" x2="215" y2="227.5" stroke={colors.frames} strokeWidth="2" />
-                <rect x="172" y="253" width="51" height="5" fill={colors.trim} />
-              </g>
-
-              <g>
-                <rect x="300" y="200" width="45" height="55" fill={colors.frames} rx="1" />
-                <rect x="305" y="205" width="35" height="45" fill="url(#glassGradient)" />
-                <line x1="322.5" y1="205" x2="322.5" y2="250" stroke={colors.frames} strokeWidth="2" />
-                <line x1="305" y1="227.5" x2="340" y2="227.5" stroke={colors.frames} strokeWidth="2" />
-                <rect x="297" y="253" width="51" height="5" fill={colors.trim} />
-              </g>
+              {/* Connecting roof section */}
+              <polygon points="280,230 310,200 340,230" fill={colors.roof} />
 
               {/* Garage Door */}
               <g>
-                <rect x="430" y="340" width="140" height="115" fill="#e0e0e0" rx="2" />
-                <rect x="435" y="345" width="130" height="105" fill="#d0d0d0" />
-                {/* Garage door panels */}
-                <line x1="435" y1="370" x2="565" y2="370" stroke="#bbb" strokeWidth="2" />
-                <line x1="435" y1="395" x2="565" y2="395" stroke="#bbb" strokeWidth="2" />
-                <line x1="435" y1="420" x2="565" y2="420" stroke="#bbb" strokeWidth="2" />
-                {/* Garage windows */}
-                <rect x="445" y="350" width="25" height="15" fill="url(#glassGradient)" />
-                <rect x="488" y="350" width="25" height="15" fill="url(#glassGradient)" />
-                <rect x="530" y="350" width="25" height="15" fill="url(#glassGradient)" />
+                <rect x="120" y="280" width="140" height="100" rx="3" fill="url(#garageGradient)" />
+                {/* Garage door panels - 4x4 grid */}
+                {[0, 1, 2, 3].map((row) =>
+                  [0, 1, 2, 3].map((col) => (
+                    <rect
+                      key={`panel-${row}-${col}`}
+                      x={125 + col * 33}
+                      y={285 + row * 23}
+                      width="28"
+                      height="18"
+                      rx="1"
+                      fill={garageDark}
+                      opacity="0.15"
+                    />
+                  ))
+                )}
+                {/* Garage door frame */}
+                <rect x="120" y="280" width="140" height="100" rx="3" fill="none" stroke={garageDark} strokeWidth="2" opacity="0.3" />
               </g>
 
-              {/* Garage side window */}
+              {/* Wall sconces/lights by garage */}
+              <rect x="108" y="295" width="8" height="12" fill="#3a3530" rx="1" />
+              <rect x="264" y="295" width="8" height="12" fill="#3a3530" rx="1" />
+
+              {/* Entry area with door */}
               <g>
-                <rect x="430" y="320" width="35" height="40" fill={colors.frames} rx="1" />
-                <rect x="434" y="324" width="27" height="32" fill="url(#glassGradient)" />
-                <line x1="447.5" y1="324" x2="447.5" y2="356" stroke={colors.frames} strokeWidth="2" />
+                {/* Entry alcove */}
+                <rect x="295" y="270" width="50" height="110" fill={wallDark} />
+                
+                {/* Front Door */}
+                <rect x="305" y="285" width="35" height="95" fill="url(#doorGradient)" rx="1" />
+                {/* Door glass panel */}
+                <rect x="312" y="295" width="21" height="50" fill="url(#windowGlass)" rx="1" />
+                {/* Door handle */}
+                <circle cx="330" cy="350" r="3" fill="#c0a080" />
+                
+                {/* Entry light */}
+                <rect x="340" y="290" width="6" height="10" fill="#3a3530" rx="1" />
               </g>
 
-              {/* Shutters for main window */}
-              <rect x="135" y="318" width="10" height="74" fill={colors.door} opacity="0.9" />
-              <rect x="200" y="318" width="10" height="74" fill={colors.door} opacity="0.9" />
+              {/* Windows - Main section */}
+              <g>
+                {/* Left large window */}
+                <rect x="370" y="270" width="90" height="65" fill={colors.frames} rx="2" />
+                <rect x="375" y="275" width="80" height="55" fill="url(#windowGlass)" />
+                {/* Blinds effect */}
+                {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+                  <line
+                    key={`blind1-${i}`}
+                    x1="376"
+                    y1={278 + i * 6.5}
+                    x2="454"
+                    y2={278 + i * 6.5}
+                    stroke="#d5dce5"
+                    strokeWidth="2"
+                    opacity="0.7"
+                  />
+                ))}
+                {/* Window divider */}
+                <line x1="420" y1="275" x2="420" y2="330" stroke={colors.frames} strokeWidth="4" />
 
-              {/* Landscaping - bushes */}
-              <ellipse cx="140" cy="465" rx="30" ry="20" fill="#2e7d32" />
-              <ellipse cx="160" cy="465" rx="25" ry="18" fill="#388e3c" />
-              <ellipse cx="580" cy="465" rx="35" ry="22" fill="#2e7d32" />
-              <ellipse cx="550" cy="465" rx="28" ry="18" fill="#388e3c" />
+                {/* Right large window */}
+                <rect x="510" y="270" width="90" height="65" fill={colors.frames} rx="2" />
+                <rect x="515" y="275" width="80" height="55" fill="url(#windowGlass)" />
+                {/* Blinds effect */}
+                {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+                  <line
+                    key={`blind2-${i}`}
+                    x1="516"
+                    y1={278 + i * 6.5}
+                    x2="594"
+                    y2={278 + i * 6.5}
+                    stroke="#d5dce5"
+                    strokeWidth="2"
+                    opacity="0.7"
+                  />
+                ))}
+                {/* Window divider */}
+                <line x1="560" y1="275" x2="560" y2="330" stroke={colors.frames} strokeWidth="4" />
+              </g>
 
-              {/* Flowers */}
-              <circle cx="185" cy="458" r="4" fill="#e91e63" />
-              <circle cx="195" cy="462" r="3" fill="#f48fb1" />
-              <circle cx="525" cy="460" r="4" fill="#ffeb3b" />
-              <circle cx="535" cy="456" r="3" fill="#fff176" />
+              {/* Landscaping plants */}
+              <g>
+                {/* Ornamental grasses - left of entry */}
+                <ellipse cx="355" cy="375" rx="20" ry="12" fill="#7a8a60" />
+                <ellipse cx="355" cy="368" rx="15" ry="8" fill="#8a9a70" />
+                
+                {/* Blue agave/yucca - right side */}
+                <ellipse cx="640" cy="378" rx="18" ry="10" fill="#6a8090" />
+                <path d="M625 378 Q640 355 655 378" fill="#7090a0" />
+                
+                {/* Small shrubs */}
+                <ellipse cx="420" cy="385" rx="15" ry="8" fill="#7a8560" />
+                <ellipse cx="550" cy="388" rx="12" ry="7" fill="#6a7555" />
+                
+                {/* Yellow flowering bush */}
+                <ellipse cx="470" cy="382" rx="14" ry="9" fill="#6a7a55" />
+                <circle cx="465" cy="378" r="3" fill="#d4a040" />
+                <circle cx="472" cy="376" r="2.5" fill="#e0b050" />
+                <circle cx="478" cy="379" r="2" fill="#d4a040" />
+
+                {/* Red accent plant */}
+                <ellipse cx="700" cy="385" rx="16" ry="9" fill="#5a6a50" />
+                <circle cx="695" cy="380" r="4" fill="#c04040" />
+                <circle cx="705" cy="382" r="3" fill="#d05050" />
+              </g>
+
+              {/* Pathway lights */}
+              <rect x="330" y="400" width="4" height="15" fill="#4a4540" />
+              <ellipse cx="332" cy="398" rx="4" ry="2" fill="#e0d080" opacity="0.6" />
+              <rect x="600" y="405" width="4" height="12" fill="#4a4540" />
+              <ellipse cx="602" cy="403" rx="4" ry="2" fill="#e0d080" opacity="0.6" />
+
+              {/* Brick/block wall in background - left */}
+              <rect x="0" y="340" width="70" height="60" fill="#9a6050" />
+              <rect x="0" y="340" width="70" height="60" fill="#8a5545" opacity="0.3" />
 
               {/* Selection highlight */}
               {activeSection === "wall" && (
-                <rect x="118" y="278" width="284" height="184" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
+                <>
+                  <rect x="278" y="228" width="384" height="124" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
+                  <rect x="98" y="248" width="184" height="134" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
+                </>
               )}
               {activeSection === "roof" && (
                 <>
-                  <polygon points="98,282 260,148 422,282" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
-                  <polygon points="378,302 500,218 622,302" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
+                  <polygon points="258,232 470,138 682,232" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
+                  <polygon points="78,252 190,178 302,252" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
                 </>
               )}
               {activeSection === "door" && (
-                <rect x="263" y="338" width="54" height="89" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
+                <rect x="303" y="283" width="39" height="99" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="8,4" opacity="0.9" />
               )}
               {activeSection === "frames" && (
                 <>
-                  <rect x="143" y="318" width="59" height="74" fill="none" stroke="#AF9D5E" strokeWidth="3" strokeDasharray="8,4" opacity="0.9" />
-                  <rect x="173" y="198" width="49" height="59" fill="none" stroke="#AF9D5E" strokeWidth="3" strokeDasharray="8,4" opacity="0.9" />
-                  <rect x="298" y="198" width="49" height="59" fill="none" stroke="#AF9D5E" strokeWidth="3" strokeDasharray="8,4" opacity="0.9" />
+                  <rect x="368" y="268" width="94" height="69" fill="none" stroke="#AF9D5E" strokeWidth="3" strokeDasharray="8,4" opacity="0.9" />
+                  <rect x="508" y="268" width="94" height="69" fill="none" stroke="#AF9D5E" strokeWidth="3" strokeDasharray="8,4" opacity="0.9" />
                 </>
               )}
               {activeSection === "trim" && (
-                <polygon points="93,285 260,146 427,285 420,280 260,154 100,280" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
+                <polygon points="253,235 470,136 687,235 680,230 470,144 260,230" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
+              )}
+              {activeSection === "garage" && (
+                <rect x="118" y="278" width="144" height="104" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
+              )}
+              {activeSection === "accent" && (
+                <rect x="278" y="348" width="384" height="34" fill="none" stroke="#AF9D5E" strokeWidth="4" strokeDasharray="10,5" opacity="0.9" />
               )}
             </svg>
           </div>
