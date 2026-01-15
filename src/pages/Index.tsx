@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import ServiceCard from "@/components/ServiceCard";
 import TestimonialSlider from "@/components/TestimonialSlider";
 import AnimatedCounter from "@/components/AnimatedCounter";
+import FreeQuoteModal from "@/components/FreeQuoteModal";
 import { Award, Shield, MessageSquare } from "lucide-react";
 
 import heroImage from "@/assets/hero-home.jpg";
@@ -15,6 +16,7 @@ import exteriorImg from "@/assets/service-exterior.jpg";
 const Index = () => {
   return (
     <div className="min-h-screen">
+      <FreeQuoteModal />
       <Header />
       
       {/* Hero Section */}
